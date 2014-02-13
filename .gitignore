@@ -15,6 +15,7 @@ doc/sources/api-*.rst
 kivy/*.c
 kivy/*.pyd
 kivy/graphics/*.c
+kivy/graphics/*.cpp
 kivy/graphics/*.pyd
 kivy/graphics/config.h
 kivy/graphics/config.pxi
