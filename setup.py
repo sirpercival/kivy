@@ -411,6 +411,7 @@ graphics_dependencies = {
     'stencil_instructions.pxd': ['instructions.pxd'],
     'stencil_instructions.pyx': [
         'config.pxi', 'opcodes.pxi', 'c_opengl.pxd', 'c_opengl_debug.pxd'],
+    'svg.pyx': ['config.pxi', 'common.pxi'],
     'texture.pxd': ['c_opengl.pxd'],
     'texture.pyx': [
         'config.pxi', 'common.pxi', 'opengl_utils_def.pxi', 'context.pxd',
@@ -447,6 +448,15 @@ sources = {
     'graphics/vbo.pyx': merge(base_flags, gl_flags),
     'graphics/vertex.pyx': merge(base_flags, gl_flags),
     'graphics/vertex_instructions.pyx': merge(base_flags, gl_flags)}
+
+sources['graphics/svg.pyx'] = merge(base_flags, gl_flags, {
+    'language': 'c++',
+    'additionnal_sources': [
+        'lib/poly2tri/poly2tri/common/shapes.cc',
+        'lib/poly2tri/poly2tri/sweep/cdt.cc',
+        'lib/poly2tri/poly2tri/sweep/advancing_front.cc',
+        'lib/poly2tri/poly2tri/sweep/sweep_context.cc',
+        'lib/poly2tri/poly2tri/sweep/sweep.cc']})
 
 if c_options['use_sdl']:
     sdl_flags = determine_sdl()
@@ -547,8 +557,10 @@ def get_extensions_from_sources(sources):
         for key, value in flags.items():
             if len(value):
                 flags_clean[key] = value
+        additionnal_sources = [expand(x) for x in
+                               flags.get('additionnal_sources', [])]
         ext_modules.append(CythonExtension(module_name,
-            [pyx], **flags_clean))
+            [pyx] + additionnal_sources, **flags_clean))
     return ext_modules
 
 ext_modules = get_extensions_from_sources(sources)
