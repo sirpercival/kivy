@@ -483,7 +483,7 @@ cdef class Mesh(VertexInstruction):
 
 
 cdef class Point(VertexInstruction):
-    '''A 2d line.
+    '''One or more disconnected points.
 
     :Parameters:
         `points`: list
@@ -617,7 +617,7 @@ cdef class Point(VertexInstruction):
             self.parent.flag_update()
 
     property points:
-        '''Property for getting/settings points of the triangle.
+        '''Property for getting/settings the coordinates of the points.
         '''
         def __get__(self):
             return self._points
